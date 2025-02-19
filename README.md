@@ -1,3 +1,5 @@
+A basic URL Shortener written with Express using TypeScript. 
+
 Setup Guide
 
 1. Clone the repository
