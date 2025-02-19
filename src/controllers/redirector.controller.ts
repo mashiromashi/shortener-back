@@ -7,9 +7,9 @@ export class RedirectorController {
 
   public redirectTo = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const shortLink = req.params.shortLink;
-      const url = await this.redirector.findLink(shortLink);
-      res.redirect(url);
+      const shortCode = req.params.shortCode;
+      const url = await this.redirector.findLink(shortCode);
+      res.send({url});
     }catch(error) {
       next(error)
     }

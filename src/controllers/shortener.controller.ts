@@ -9,7 +9,11 @@ export class ShortenerController {
     try {
       const { url } = req.body;
       const shortLink = await this.shortenerService.createShortLink(url);
-      res.status(201).send({ shortLink: `${req.protocol}://${req.get('host')}/${shortLink}` });
+      if (!url) {
+        res.status(400).send({ message: 'URL is required' });
+        return;
+      }
+      res.status(201).send({ shortLink: `${process.env.FRONTEND_URL}/${shortLink.shortCode}` });
     } catch (error) {
       next(error);
     }

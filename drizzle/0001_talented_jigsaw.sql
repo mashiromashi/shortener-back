@@ -1,0 +1,1 @@
+ALTER TABLE "link" RENAME COLUMN "ttl" TO "created_at";

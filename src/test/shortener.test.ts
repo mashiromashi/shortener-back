@@ -9,29 +9,30 @@ afterAll(async () => {
 
 describe('Testing Shortener', () => {
   describe('should create short link for the given URL', () => {
-    // it('generate a code for the short link', async () => {
-    //   const shortenerRoute = new ShortnerRoute();
-    //   const shortenerService = shortenerRoute.shortener.shortenerService;
-    //   const url = 'https://www.google.com';
-
-    //   shortenerService.generateShortLink = jest.fn().mockReturnValue('abc123');
-
-    //   const shortLink = await shortenerService.createShortLink(url);
-    //   expect(shortLink).toBe('abc123');
-    // });
-    it('response should have the Create short link', async () => {
+    it('response should have the short link', async () => {
       const shortenerRoute = new ShortnerRoute();
       const shortenerService = shortenerRoute.shortener.shortenerService;
 
       shortenerService.createShortLink = jest.fn().mockReturnValue({
-        id: randomUUID(),
-        url: 'https://www.google.com',
-        shortLink: 'http://localhost:3000/1',
+        shortCode: `1`,
       });
 
       const app = new App([shortenerRoute]);
       return request(app.getServer()).post(`${shortenerRoute.path}`).send({ url: 'https://www.google.com' }).expect({
-        shortLink: 'http://localhost:3000/1',
+        shortLink: `${process.env.FRONTEND_URL}/1`,
+      });
+    });
+    it('should respond with 400 if there is no url present', async () => {
+      const shortenerRoute = new ShortnerRoute();
+      const shortenerService = shortenerRoute.shortener.shortenerService;
+
+      shortenerService.createShortLink = jest.fn().mockReturnValue({
+        message: "URL is required"
+      });
+
+      const app = new App([shortenerRoute]);
+      return request(app.getServer()).post(`${shortenerRoute.path}`).send({ url: null }).expect({
+        message: "URL is required"
       });
     });
   });

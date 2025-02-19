@@ -1,16 +1,14 @@
-import { PrismaClient } from "@prisma/client";
+import { link } from "@/entities/link";
+import { getDB } from "@/utils/db";
+import { eq } from "drizzle-orm";
 import { Service } from "typedi";
 
 @Service()
 export class RedirectorService {
-  public link = new PrismaClient().link
 
   public async findLink(shortLink: string): Promise<string> {
-    const link = await this.link.findUnique({
-      where: {
-        code: shortLink,
-      },
-    });
-    return link.url;
+    const db = getDB()
+    const linkCheck = await db.select().from(link).where(eq(link.shortCode, shortLink));
+    return linkCheck[0].url;
   }
 }
